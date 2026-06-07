@@ -1,8 +1,13 @@
+# Запуск 
+
 Скомпилировать проект:
 
+```bash
 mvn clean compile
-
+```
 
 Запустить приложение:
 
-mvn exec:java -Dexec.mainClass="ru.battleship.Main"
+```bash
+mvn exec:java -Dexec.mainClass="com.battleship.Main"
+```
