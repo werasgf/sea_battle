@@ -101,6 +101,12 @@ public class Board {
         return Collections.unmodifiableList(ships);
     }
 
+    public int shipSizeAt(Coordinate coordinate) {
+        return findShipByCoordinate(coordinate)
+                .map(Ship::getSize)
+                .orElseThrow(() -> new IllegalStateException("Корабль по координате не найден"));
+    }
+
     public List<Coordinate> shipCoordinatesAt(Coordinate coordinate) {
         return findShipByCoordinate(coordinate)
                 .map(Ship::getCoordinates)

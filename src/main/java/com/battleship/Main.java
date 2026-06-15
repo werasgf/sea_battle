@@ -61,15 +61,17 @@ public class Main {
 
         BotTargetMemory botTargetMemory = new BotTargetMemory();
 
-        RandomSearchStrategy randomSearchStrategy = new RandomSearchStrategy(random);
+        ProbabilitySearchStrategy probabilitySearchStrategy = new ProbabilitySearchStrategy(random);
+        RemainingFleet remainingFleet = new RemainingFleet();
 
         AttackFinishingStrategy attackFinishingStrategy = new AttackFinishingStrategy();
 
         BotTurnService botTurnService = new BotTurnService(
                 consoleIO,
-                randomSearchStrategy,
+                probabilitySearchStrategy,
                 attackFinishingStrategy,
-                botTargetMemory
+                botTargetMemory,
+                remainingFleet
         );
 
         Game singlePlayerGame = new SinglePlayerGame(

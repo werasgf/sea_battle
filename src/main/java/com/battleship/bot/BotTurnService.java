@@ -10,31 +10,26 @@ import lombok.RequiredArgsConstructor;
 public class BotTurnService {
 
     private final ConsoleIO consoleIO;
-
-    private final RandomSearchStrategy randomSearchStrategy;
-
+    private final ProbabilitySearchStrategy probabilitySearchStrategy;
     private final AttackFinishingStrategy attackFinishingStrategy;
-
     private final BotTargetMemory targetMemory;
+    private final RemainingFleet remainingFleet;
 
     public ShotResult makeTurn(
             Board playerBoard,
             KnowledgeBoard botKnowledgeBoard
     ) {
-
         Coordinate coordinate;
 
         if (targetMemory.hasActiveTarget()) {
-
             coordinate = attackFinishingStrategy.chooseShot(
                     botKnowledgeBoard,
                     targetMemory
             );
-
         } else {
-
-            coordinate = randomSearchStrategy.chooseShot(
-                    botKnowledgeBoard
+            coordinate = probabilitySearchStrategy.chooseShot(
+                    botKnowledgeBoard,
+                    remainingFleet.asMap()
             );
         }
 
@@ -46,30 +41,28 @@ public class BotTurnService {
             botKnowledgeBoard.applyShotResult(coordinate, result);
         }
 
-        updateMemory(
-                coordinate,
-                result
-        );
+        updateMemoryAndFleet(coordinate, result, playerBoard);
 
-        consoleIO.printLine(
-                "Бот стреляет в "
-                        + coordinate.toConsoleValue()
-        );
-
-        consoleIO.printLine(
-                "Результат: "
-                        + result.getTitle()
-        );
+        consoleIO.printLine("Бот стреляет в " + coordinate.toConsoleValue());
+        consoleIO.printLine("Результат: " + result.getTitle());
 
         return result;
     }
 
-    private void updateMemory(Coordinate coordinate, ShotResult result) {
+    private void updateMemoryAndFleet(
+            Coordinate coordinate,
+            ShotResult result,
+            Board playerBoard
+    ) {
         if (result == ShotResult.HIT) {
             targetMemory.addHit(coordinate);
+            return;
         }
 
         if (result == ShotResult.KILLED) {
+            int killedShipSize = playerBoard.shipSizeAt(coordinate);
+
+            remainingFleet.markKilled(killedShipSize);
             targetMemory.clear();
         }
     }
