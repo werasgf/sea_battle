@@ -2,5 +2,8 @@ package com.battleship.field;
 
 public enum CellState {
     EMPTY,
-    SHIP
+    SHIP,
+    MISS,
+    HIT,
+    FORBIDDEN
 }

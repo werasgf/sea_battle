@@ -1,7 +1,9 @@
 package com.battleship;
 
 import com.battleship.app.GameApplication;
+import com.battleship.bot.*;
 import com.battleship.field.BoardRenderer;
+import com.battleship.field.CoordinateParser;
 import com.battleship.game.Game;
 import com.battleship.game.SinglePlayerGame;
 import com.battleship.io.ConsoleIO;
@@ -11,7 +13,9 @@ import com.battleship.placement.ManualShipPlacementConsole;
 import com.battleship.placement.ShipPlacementModeSelector;
 import com.battleship.ship.ShipPlacementCommandParser;
 import com.battleship.ship.ShipPlacementService;
+import com.battleship.turn.PlayerTurnService;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -23,8 +27,16 @@ public class Main {
         );
 
         BoardRenderer boardRenderer = new BoardRenderer(consoleIO);
+        KnowledgeBoardRenderer knowledgeBoardRenderer = new KnowledgeBoardRenderer(consoleIO);
+        CoordinateParser coordinateParser = new CoordinateParser();
 
-        ShipPlacementCommandParser commandParser = new ShipPlacementCommandParser();
+        PlayerTurnService playerTurnService = new PlayerTurnService(
+                consoleIO,
+                coordinateParser,
+                knowledgeBoardRenderer
+        );
+
+        ShipPlacementCommandParser commandParser = new ShipPlacementCommandParser(coordinateParser);
         ShipPlacementService shipPlacementService = new ShipPlacementService();
 
         ManualShipPlacementConsole manualShipPlacementConsole = new ManualShipPlacementConsole(
@@ -44,12 +56,29 @@ public class Main {
 
         GameModeSelector gameModeSelector = new GameModeSelector(consoleIO);
 
+        Random random = new Random();
+
+        BotTargetMemory botTargetMemory = new BotTargetMemory();
+
+        RandomSearchStrategy randomSearchStrategy = new RandomSearchStrategy(random);
+
+        AttackFinishingStrategy attackFinishingStrategy = new AttackFinishingStrategy();
+
+        BotTurnService botTurnService = new BotTurnService(
+                consoleIO,
+                randomSearchStrategy,
+                attackFinishingStrategy,
+                botTargetMemory
+        );
+
         Game singlePlayerGame = new SinglePlayerGame(
                 consoleIO,
                 manualShipPlacementConsole,
                 autoShipPlacementService,
                 boardRenderer,
-                shipPlacementModeSelector
+                shipPlacementModeSelector,
+                playerTurnService,
+                botTurnService
         );
 
         GameApplication application = new GameApplication(

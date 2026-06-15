@@ -1,25 +1,27 @@
-package com.battleship.field;
+package com.battleship.bot;
 
+import com.battleship.field.Coordinate;
 import com.battleship.io.ConsoleIO;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class BoardRenderer {
+public class KnowledgeBoardRenderer {
+
     private static final char FIRST_COLUMN_LETTER = 'A';
 
     private final ConsoleIO consoleIO;
 
-    public void render(Board board) {
-        printHeader(board);
+    public void render(KnowledgeBoard knowledgeBoard) {
+        printHeader(knowledgeBoard);
 
-        for (int row = 0; row < board.getSize(); row++) {
+        for (int row = 0; row < knowledgeBoard.getSize(); row++) {
             StringBuilder line = new StringBuilder();
 
             line.append(String.format("%2d  ", row + 1));
 
-            for (int column = 0; column < board.getSize(); column++) {
+            for (int column = 0; column < knowledgeBoard.getSize(); column++) {
                 Coordinate coordinate = new Coordinate(row, column);
-                CellState cellState = board.cellStateAt(coordinate);
+                KnowledgeCellState cellState = knowledgeBoard.cellStateAt(coordinate);
 
                 line.append(toSymbol(cellState)).append(' ');
             }
@@ -28,10 +30,10 @@ public class BoardRenderer {
         }
     }
 
-    private void printHeader(Board board) {
+    private void printHeader(KnowledgeBoard knowledgeBoard) {
         StringBuilder header = new StringBuilder("    ");
 
-        for (int column = 0; column < board.getSize(); column++) {
+        for (int column = 0; column < knowledgeBoard.getSize(); column++) {
             char columnLetter = (char) (FIRST_COLUMN_LETTER + column);
             header.append(columnLetter).append(' ');
         }
@@ -39,12 +41,11 @@ public class BoardRenderer {
         consoleIO.printLine(header.toString());
     }
 
-    private String toSymbol(CellState cellState) {
+    private String toSymbol(KnowledgeCellState cellState) {
         return switch (cellState) {
-            case EMPTY -> ".";
-            case SHIP -> "■";
+            case UNKNOWN -> ".";
             case MISS, FORBIDDEN -> "☉";
-            case HIT -> "⛝";
+            case HIT, KILLED -> "⛝";
         };
     }
 }

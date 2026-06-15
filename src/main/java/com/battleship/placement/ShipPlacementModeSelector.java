@@ -14,11 +14,11 @@ public class ShipPlacementModeSelector {
 
             int selectedNumber = consoleIO.readInt("Ваш выбор: ");
 
-            if (selectedNumber == ShipPlacementMode.MANUAL.number()) {
+            if (selectedNumber == ShipPlacementMode.MANUAL.getNumber()) {
                 return ShipPlacementMode.MANUAL;
             }
 
-            if (selectedNumber == ShipPlacementMode.AUTO.number()) {
+            if (selectedNumber == ShipPlacementMode.AUTO.getNumber()) {
                 return ShipPlacementMode.AUTO;
             }
 
@@ -29,8 +29,8 @@ public class ShipPlacementModeSelector {
 
     private void printMenu() {
         consoleIO.printLine("Выберите способ расстановки кораблей:");
-        consoleIO.printLine("1 — " + ShipPlacementMode.MANUAL.title());
-        consoleIO.printLine("2 — " + ShipPlacementMode.AUTO.title());
+        consoleIO.printLine("1 — " + ShipPlacementMode.MANUAL.getTitle());
+        consoleIO.printLine("2 — " + ShipPlacementMode.AUTO.getTitle());
         consoleIO.printEmptyLine();
     }
 }
