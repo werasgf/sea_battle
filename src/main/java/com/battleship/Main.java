@@ -3,6 +3,7 @@ package com.battleship;
 import com.battleship.app.GameApplication;
 import com.battleship.bot.*;
 import com.battleship.field.BoardRenderer;
+import com.battleship.field.BoardsPairRenderer;
 import com.battleship.field.CoordinateParser;
 import com.battleship.game.Game;
 import com.battleship.game.SinglePlayerGame;
@@ -27,13 +28,13 @@ public class Main {
         );
 
         BoardRenderer boardRenderer = new BoardRenderer(consoleIO);
-        KnowledgeBoardRenderer knowledgeBoardRenderer = new KnowledgeBoardRenderer(consoleIO);
         CoordinateParser coordinateParser = new CoordinateParser();
+        BoardsPairRenderer boardsPairRenderer = new BoardsPairRenderer(consoleIO);
 
         PlayerTurnService playerTurnService = new PlayerTurnService(
                 consoleIO,
                 coordinateParser,
-                knowledgeBoardRenderer
+                boardsPairRenderer
         );
 
         ShipPlacementCommandParser commandParser = new ShipPlacementCommandParser(coordinateParser);

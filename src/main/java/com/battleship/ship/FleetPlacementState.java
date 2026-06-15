@@ -27,11 +27,11 @@ public class FleetPlacementState {
     }
 
     public boolean hasRemainingShipOfSize(int size) {
-        return remainingShipsBySize.getOrDefault(size, 0) > 0;
+        return remainingShipsBySize.getOrDefault(size, 0) <= 0;
     }
 
     public void markPlaced(int size) {
-        if (!hasRemainingShipOfSize(size)) {
+        if (hasRemainingShipOfSize(size)) {
             throw new ShipPlacementException("Корабли размера " + size + " уже расставлены");
         }
 

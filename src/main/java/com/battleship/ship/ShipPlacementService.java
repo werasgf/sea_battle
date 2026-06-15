@@ -37,7 +37,7 @@ public class ShipPlacementService {
             throw new ShipPlacementException("Кораблей размера " + size + " нет в правилах игры");
         }
 
-        if (!fleetPlacementState.hasRemainingShipOfSize(size)) {
+        if (fleetPlacementState.hasRemainingShipOfSize(size)) {
             throw new ShipPlacementException("Все корабли размера " + size + " уже расставлены");
         }
     }

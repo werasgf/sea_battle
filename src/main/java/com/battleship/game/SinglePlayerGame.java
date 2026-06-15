@@ -74,6 +74,7 @@ public class SinglePlayerGame implements Game {
             if (playerTurn) {
                 ShotResult playerShotResult = playerTurnService.makeTurn(
                         player,
+                        playerBoard,
                         botBoard,
                         playerKnowledgeBoard
                 );
@@ -91,13 +92,12 @@ public class SinglePlayerGame implements Game {
                         botKnowledgeBoard
                 );
 
-                consoleIO.printEmptyLine();
-                consoleIO.printLine("Ваше поле после хода бота:");
-                boardRenderer.render(playerBoard);
-
                 if (playerBoard.allShipsKilled()) {
                     consoleIO.printEmptyLine();
                     consoleIO.printLine("Поражение. Ты проиграл битву, но не войну!");
+                    consoleIO.printEmptyLine();
+                    consoleIO.printLine("Расстановка кораблей соперника:");
+                    boardRenderer.render(botBoard);
                     return;
                 }
 

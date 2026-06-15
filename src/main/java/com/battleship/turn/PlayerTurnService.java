@@ -1,8 +1,8 @@
 package com.battleship.turn;
 
 import com.battleship.bot.KnowledgeBoard;
-import com.battleship.bot.KnowledgeBoardRenderer;
 import com.battleship.field.Board;
+import com.battleship.field.BoardsPairRenderer;
 import com.battleship.field.Coordinate;
 import com.battleship.field.CoordinateParser;
 import com.battleship.io.ConsoleIO;
@@ -14,17 +14,18 @@ public class PlayerTurnService {
 
     private final ConsoleIO consoleIO;
     private final CoordinateParser coordinateParser;
-    private final KnowledgeBoardRenderer knowledgeBoardRenderer;
+    private final BoardsPairRenderer boardsPairRenderer;
 
     public ShotResult makeTurn(
             Player player,
+            Board playerBoard,
             Board enemyBoard,
             KnowledgeBoard playerKnowledgeBoard
     ) {
         consoleIO.printEmptyLine();
         consoleIO.printLine("Ход игрока: " + player.name());
-        consoleIO.printLine("Поле соперника:");
-        knowledgeBoardRenderer.render(playerKnowledgeBoard);
+
+        boardsPairRenderer.render(playerBoard, playerKnowledgeBoard);
 
         while (true) {
             String input = consoleIO.readRequiredLine("Введите координату выстрела: ");
@@ -33,7 +34,7 @@ public class PlayerTurnService {
                 Coordinate coordinate = coordinateParser.parse(input);
 
                 if (!playerKnowledgeBoard.canShootAt(coordinate)) {
-                    consoleIO.printLine("По этой клетке уже стреляли или она недоступна. Выберите другую");
+                    consoleIO.printLine("По этой клетке уже стреляли или она недоступна. Выберите другую.");
                     continue;
                 }
 
